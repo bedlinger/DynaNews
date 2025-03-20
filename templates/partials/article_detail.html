@@ -1,4 +1,4 @@
-<div class="modal-box">
+<div class="modal-box max-h-3/4 min-w-3/4 overflow-y-auto">
     <h3 class="font-bold text-2xl">{{ article.title }}</h3>
     <div class="badge badge-outline my-2">{{ article.category }}</div>
 
@@ -11,21 +11,25 @@
         {% include 'partials/comments.html' %}
     </div>
 
-    <form hx-post="{{ url_for('add_comment') }}" hx-target="#comments-section" class="mt-4">
+    <form hx-post="{{ url_for('add_comment') }}" hx-target="#comments-section" class="mt-4 space-y-4">
         <input type="hidden" name="article_id" value="{{ article.id }}">
-        <div class="form-control">
-            <label class="label">
-                <span class="label-text">Name (optional):</span>
+        <div class="form-control w-full">
+            <label class="label" for="user">
+                <span class="label-text">Benutzer</span>
             </label>
-            <input type="text" name="user" class="input input-bordered" placeholder="Anonym">
+            <input type="text" name="user" class="input input-bordered w-full" placeholder="Anonym">
         </div>
-        <div class="form-control">
-            <label class="label">
-                <span class="label-text">Kommentar:</span>
+        <div class="form-control w-full">
+            <label class="label" for="text">
+                <span class="label-text">Kommentar</span>
             </label>
-            <textarea name="text" class="textarea textarea-bordered" required placeholder="Schreibe einen Kommentar..."></textarea>
+            <textarea name="text" class="textarea textarea-bordered w-full" rows="3" required
+                      placeholder="Schreibe einen Kommentar..."></textarea>
         </div>
-        <button type="submit" class="btn btn-primary mt-2">Kommentieren</button>
+        <button type="submit" class="btn btn-primary">
+            <span class="material-icons mr-1">send</span>
+            Kommentieren
+        </button>
     </form>
 
     <div class="modal-action">
