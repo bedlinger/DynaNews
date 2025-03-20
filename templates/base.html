@@ -14,23 +14,9 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-<header>
-    <div class="navbar bg-base-100 shadow-sm">
-        <div class="flex-1">
-            <a class="btn btn-ghost text-xl">DynaNews</a>
-        </div>
-        <div class="flex-none">
-            <button class="btn btn-square btn-ghost">
-                <span class="material-icons">face</span>
-            </button>
-        </div>
-    </div>
-</header>
 
-<main class="container mx-auto my-4">
-    {% block content %}
-        <!-- Hier wird der Hauptinhalt der Seite eingefügt -->
-    {% endblock %}
-</main>
+{% block content %}
+{% endblock %}
+
 </body>
 </html>

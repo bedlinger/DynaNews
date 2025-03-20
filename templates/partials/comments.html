@@ -1,0 +1,12 @@
+{% if comments %}
+    <div class="space-y-2">
+        {% for comment in comments %}
+            <div class="bg-base-200 p-3 rounded">
+                <div class="font-bold">{{ comment.user }}</div>
+                <div>{{ comment.text }}</div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Noch keine Kommentare vorhanden.</p>
+{% endif %}
