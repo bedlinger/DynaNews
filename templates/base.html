@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de-at">
+<html lang="de-at" data-theme="silk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,21 +15,21 @@
 </head>
 <body>
 <header>
-    <nav class="navbar bg-base-100">
-        <div class="flex-none">
-            <a href="/" class="btn btn-ghost normal-case text-xl">DynaNews</a>
-        </div>
+    <div class="navbar bg-base-100 shadow-sm">
         <div class="flex-1">
-            <ul class="menu menu-horizontal p-0">
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About</a></li>
-            </ul>
+            <a class="btn btn-ghost text-xl">DynaNews</a>
         </div>
-    </nav>
+        <div class="flex-none">
+            <button class="btn btn-square btn-ghost">
+                <span class="material-icons">face</span>
+            </button>
+        </div>
+    </div>
 </header>
 
 <main class="container mx-auto my-4">
     {% block content %}
+        <!-- Hier wird der Hauptinhalt der Seite eingefügt -->
     {% endblock %}
 </main>
 </body>
