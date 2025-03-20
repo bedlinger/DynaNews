@@ -4,7 +4,7 @@ db = SQLAlchemy()
 
 class Article(db.Model):
     __tablename__ = 'articles'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(255), nullable=False)
     summary = db.Column(db.Text, nullable=False)
     content = db.Column(db.Text, nullable=False)
@@ -14,7 +14,7 @@ class Article(db.Model):
 
 class Comment(db.Model):
     __tablename__ = 'comments'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user = db.Column(db.String(50), default="Anonymous")
     text = db.Column(db.Text, nullable=False)
     article_id = db.Column(db.Integer, db.ForeignKey('articles.id'), nullable=False) # Fremdschlüssel zu articles
