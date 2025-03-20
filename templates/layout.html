@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}DynaNews{% endblock %}
+
+{% block content %}
+    <header>
+        <div class="navbar bg-base-100 shadow-sm">
+            <div class="flex-1">
+                <a class="btn btn-ghost text-xl">DynaNews</a>
+            </div>
+            <div class="flex-none">
+                <button class="btn btn-square btn-ghost">
+                    <span class="material-icons">face</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto">
+        {% block main_content %}{% endblock %}
+    </div>
+{% endblock %}

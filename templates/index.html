@@ -1,9 +1,30 @@
-{% extends 'base.html' %}
+{% extends 'layout.html' %}
 
-{% block title %}Dynanews{% endblock %}
-
-{% block content %}
-    <div class="container mx-auto">
-        <p>Test</p>
+{% block main_content %}
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Aktuelle Artikel</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for article in articles %}
+                <div class="card bg-base-100 shadow-xl">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ article.title }}</h2>
+                        <div class="badge badge-outline">{{ article.category }}</div>
+                        <p>{{ article.summary }}</p>
+                        <div class="card-actions justify-end mt-2">
+                            <button class="btn btn-primary" hx-get="{{ url_for('article_detail', id=article.id) }}"
+                                    hx-target="#article-modal"
+                                    onclick="document.getElementById('article-modal').showModal()">
+                                Weiterlesen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
+
+    <!-- Modal für Artikeldetails -->
+    <dialog id="article-modal" class="modal modal-lg">
+        <!-- Content wird via HTMX geladen -->
+    </dialog>
 {% endblock %}
