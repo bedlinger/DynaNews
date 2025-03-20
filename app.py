@@ -39,8 +39,10 @@ def create_app():
         text: str = request.form.get('text')
         user: str = request.form.get('user', 'Anonymous')
 
-        if not article_id or not text:
-            return 'Fehlende Daten', 400
+        if not article_id:
+            return 'Article ID is required', 400
+        if not text:
+            return 'Comment text is required', 400
 
         comment = Comment(text=text, user=user, article_id=article_id)
         db.session.add(comment)
