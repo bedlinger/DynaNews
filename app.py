@@ -26,11 +26,13 @@ def create_app():
     def index():
         search_query = request.args.get('search', '')
         category_filter = request.args.get('category_filter', '')
+        page = int(request.args.get('page', 1))
+        per_page = 6
 
         # Base query
         query = Article.query
 
-        # Suche nach Suchbegriff in Titel, Zusammenfassung und Inhalt, wenn vorhanden
+        # Suchen query
         if search_query:
             query = query.filter(
                 (Article.title.ilike(f'%{search_query}%')) |
@@ -38,22 +40,50 @@ def create_app():
                 (Article.content.ilike(f'%{search_query}%'))
             )
 
-        # Filter nach Kategorie, wenn vorhanden
+        # Kategorie filtern
         if category_filter:
             query = query.filter(Article.category == category_filter)
 
-        # Alle Artikel abrufen, welche den Suchkriterien entsprechen
-        articles = query.all()
+        # Gesamtanzahl der Artikel
+        total_count = query.count()
 
-        # Alle Kategorien abrufen
+        # Artikel für die aktuelle Seite
+        articles = query.limit(per_page).offset((page - 1) * per_page).all()
+
+        # Prüfen, ob es noch mehr Artikel gibt
+        has_more = total_count > (page * per_page)
+
+        # Kategorien für Filter
         categories = db.session.query(Article.category).distinct().order_by(Article.category).all()
         categories = [category[0] for category in categories]
 
-        # Wenn es sich um eine HX-Anfrage handelt, nur den Artikel-Container zurückgeben
+        # Wenn HTMX-Request (Header 'HX-Request') vorhanden ist, nur die Artikel-Liste zurückgeben
         if request.headers.get('HX-Request'):
-            return render_template('partials/articles_container.html', articles=articles)
+            # Für Paginierung HTMX-Requests (nur Artikel-Container aktualisieren)
+            if page > 1 and 'hx-target' in request.headers and request.headers['hx-target'] == '#load-more':
+                return render_template('partials/articles.html',
+                                       articles=articles,
+                                       page=page,
+                                       has_more=has_more,
+                                       search=search_query,
+                                       category_filter=category_filter)
+            # Für Such- und Filter-Requests (komplette Seite mit Artikeln und Kategorien)
+            else:
+                return render_template('partials/articles.html',
+                                       articles=articles,
+                                       page=1,  # Seite 1, da HTMX-Request
+                                       has_more=has_more,
+                                       search=search_query,
+                                       category_filter=category_filter)
 
-        return render_template('index.html', articles=articles, categories=categories)
+        # Ansonsten die gesamte Seite mit Artikeln und Kategorien
+        return render_template('index.html',
+                               articles=articles,
+                               categories=categories,
+                               page=page,
+                               has_more=has_more,
+                               search=search_query,
+                               category_filter=category_filter)
 
     # Detailansicht eines Artikels
     @app.route('/article/<int:id>')

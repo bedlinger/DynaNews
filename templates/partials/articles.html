@@ -1,3 +1,5 @@
+{% set is_load_more = request.args.get('page', '1')|int > 1 %}
+
 {% for article in articles %}
     <div class="card bg-base-100 shadow-xl">
         <div class="card-body">
@@ -14,7 +16,20 @@
         </div>
     </div>
 {% else %}
+    {% if not is_load_more %}
     <div class="col-span-2 text-center py-8">
         <p class="text-xl">Keine Artikel gefunden.</p>
     </div>
+    {% endif %}
 {% endfor %}
+
+{% if has_more %}
+    <div id="load-more" class="col-span-1 md:col-span-2 flex justify-center my-6">
+        <button class="btn btn-outline"
+                hx-get="{{ url_for('index', search=search, category_filter=category_filter, page=page+1) }}"
+                hx-target="#load-more"
+                hx-swap="outerHTML">
+            Mehr laden
+        </button>
+    </div>
+{% endif %}

@@ -10,11 +10,12 @@
                 <div class="input-group join w-3/4">
                     <input type="text" placeholder="Suche..." class="input input-bordered join-item w-full"
                            id="search-input" name="search"
-                           hx-get="{{ url_for('index') }}"
+                           hx-get="{{ url_for('index', page=1) }}"
                            hx-trigger="keyup changed delay:200ms"
                            hx-target="#articles-container"
                            hx-include="#category-filter"/>
-                    <button class="btn btn-primary join-item" hx-get="{{ url_for('index') }}"
+                    <button class="btn btn-primary join-item"
+                            hx-get="{{ url_for('index', page=1) }}"
                             hx-target="#articles-container"
                             hx-include="[name='search'], #category-filter">
                         <span class="material-icons">search</span>
@@ -23,7 +24,7 @@
             </div>
             <div class="form-control">
                 <select id="category-filter" name="category_filter" class="select select-bordered"
-                        hx-get="{{ url_for('index') }}"
+                        hx-get="{{ url_for('index', page=1) }}"
                         hx-trigger="change"
                         hx-target="#articles-container"
                         hx-include="[name='search']">
@@ -37,8 +38,7 @@
 
         <!-- Articles Container -->
         <div id="articles-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {% set articles = articles %}
-            {% include 'partials/articles_container.html' %}
+            {% include 'partials/articles.html' %}
         </div>
     </div>
 
