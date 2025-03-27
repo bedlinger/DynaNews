@@ -64,9 +64,9 @@ def create_app():
     # Route zum Hinzufügen eines Kommentars
     @app.route('/comments', methods=['POST'])
     def add_comment():
-        article_id: int = int(request.form.get('article_id'))
-        text: str = request.form.get('text')
-        user: str = request.form.get('user', 'Anonymous')
+        article_id = int(request.form.get('article_id'))
+        text = request.form.get('text')
+        user = request.form.get('user', 'Anonymous')
 
         if not article_id:
             return 'Article ID is required', 400
@@ -77,6 +77,12 @@ def create_app():
         db.session.add(comment)
         db.session.commit()
 
+        article = Article.query.get_or_404(article_id)
+        return render_template('partials/comments.html', comments=article.comments)
+
+    # Route zum Abrufen der Kommentare eines Artikels
+    @app.route('/comments/<int:article_id>')
+    def get_comments(article_id):
         article = Article.query.get_or_404(article_id)
         return render_template('partials/comments.html', comments=article.comments)
 

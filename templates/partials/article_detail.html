@@ -6,7 +6,9 @@
 
     <div class="divider">Kommentare</div>
 
-    <div id="comments-section">
+    <div id="comments-section"
+         hx-get="{{ url_for('get_comments', article_id=article.id) }}"
+         hx-trigger="load, every 5s">
         {% set comments = article.comments %}
         {% include 'partials/comments.html' %}
     </div>
