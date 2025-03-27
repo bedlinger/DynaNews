@@ -1,0 +1,20 @@
+{% for article in articles %}
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title">{{ article.title }}</h2>
+            <div class="badge badge-outline">{{ article.category }}</div>
+            <p>{{ article.summary }}</p>
+            <div class="card-actions justify-end mt-2">
+                <button class="btn btn-primary" hx-get="{{ url_for('article_detail', id=article.id) }}"
+                        hx-target="#article-modal"
+                        onclick="document.getElementById('article-modal').showModal()">
+                    Weiterlesen
+                </button>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="col-span-2 text-center py-8">
+        <p class="text-xl">Keine Artikel gefunden.</p>
+    </div>
+{% endfor %}

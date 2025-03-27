@@ -24,8 +24,36 @@ def create_app():
 
     @app.route('/')
     def index():
-        articles: list[Article] = Article.query.all()
-        return render_template('index.html', articles=articles)
+        search_query = request.args.get('search', '')
+        category_filter = request.args.get('category_filter', '')
+
+        # Base query
+        query = Article.query
+
+        # Suche nach Suchbegriff in Titel, Zusammenfassung und Inhalt, wenn vorhanden
+        if search_query:
+            query = query.filter(
+                (Article.title.ilike(f'%{search_query}%')) |
+                (Article.summary.ilike(f'%{search_query}%')) |
+                (Article.content.ilike(f'%{search_query}%'))
+            )
+
+        # Filter nach Kategorie, wenn vorhanden
+        if category_filter:
+            query = query.filter(Article.category == category_filter)
+
+        # Alle Artikel abrufen, welche den Suchkriterien entsprechen
+        articles = query.all()
+
+        # Alle Kategorien abrufen
+        categories = db.session.query(Article.category).distinct().order_by(Article.category).all()
+        categories = [category[0] for category in categories]
+
+        # Wenn es sich um eine HX-Anfrage handelt, nur den Artikel-Container zurückgeben
+        if request.headers.get('HX-Request'):
+            return render_template('partials/articles_container.html', articles=articles)
+
+        return render_template('index.html', articles=articles, categories=categories)
 
     # Detailansicht eines Artikels
     @app.route('/article/<int:id>')

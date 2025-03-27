@@ -3,23 +3,42 @@
 {% block main_content %}
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">Aktuelle Artikel</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {% for article in articles %}
-                <div class="card bg-base-100 shadow-xl">
-                    <div class="card-body">
-                        <h2 class="card-title">{{ article.title }}</h2>
-                        <div class="badge badge-outline">{{ article.category }}</div>
-                        <p>{{ article.summary }}</p>
-                        <div class="card-actions justify-end mt-2">
-                            <button class="btn btn-primary" hx-get="{{ url_for('article_detail', id=article.id) }}"
-                                    hx-target="#article-modal"
-                                    onclick="document.getElementById('article-modal').showModal()">
-                                Weiterlesen
-                            </button>
-                        </div>
-                    </div>
+
+        <!-- Suchen und Filtern Section -->
+        <div class="flex flex-col md:flex-row gap-4 mb-6">
+            <div class="form-control flex-1">
+                <div class="input-group join w-3/4">
+                    <input type="text" placeholder="Suche..." class="input input-bordered join-item w-full"
+                           id="search-input" name="search"
+                           hx-get="{{ url_for('index') }}"
+                           hx-trigger="keyup changed delay:200ms"
+                           hx-target="#articles-container"
+                           hx-include="#category-filter"/>
+                    <button class="btn btn-primary join-item" hx-get="{{ url_for('index') }}"
+                            hx-target="#articles-container"
+                            hx-include="[name='search'], #category-filter">
+                        <span class="material-icons">search</span>
+                    </button>
                 </div>
-            {% endfor %}
+            </div>
+            <div class="form-control">
+                <select id="category-filter" name="category_filter" class="select select-bordered"
+                        hx-get="{{ url_for('index') }}"
+                        hx-trigger="change"
+                        hx-target="#articles-container"
+                        hx-include="[name='search']">
+                    <option value="">Alle Kategorien</option>
+                    {% for category in categories %}
+                        <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Articles Container -->
+        <div id="articles-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% set articles = articles %}
+            {% include 'partials/articles_container.html' %}
         </div>
     </div>
 
