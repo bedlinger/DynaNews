@@ -59,22 +59,12 @@ def create_app():
 
         # Wenn HTMX-Request (Header 'HX-Request') vorhanden ist, nur die Artikel-Liste zurückgeben
         if request.headers.get('HX-Request'):
-            # Für Paginierung HTMX-Requests (nur Artikel-Container aktualisieren)
-            if page > 1 and 'hx-target' in request.headers and request.headers['hx-target'] == '#load-more':
-                return render_template('partials/articles.html',
-                                       articles=articles,
-                                       page=page,
-                                       has_more=has_more,
-                                       search=search_query,
-                                       category_filter=category_filter)
-            # Für Such- und Filter-Requests (komplette Seite mit Artikeln und Kategorien)
-            else:
-                return render_template('partials/articles.html',
-                                       articles=articles,
-                                       page=1,  # Seite 1, da HTMX-Request
-                                       has_more=has_more,
-                                       search=search_query,
-                                       category_filter=category_filter)
+            return render_template('partials/articles.html',
+                                   articles=articles,
+                                   page=page,
+                                   has_more=has_more,
+                                   search=search_query,
+                                   category_filter=category_filter)
 
         # Ansonsten die gesamte Seite mit Artikeln und Kategorien
         return render_template('index.html',
