@@ -2,6 +2,10 @@
 
 A dynamic news web application built with Flask and HTMX. Browse, search, and filter news articles across multiple categories, and leave comments — all without full page reloads.
 
+## Motivation
+
+This project was built as a hands-on way to learn [HTMX](https://htmx.org/) and put it into practice by building something real. The goal was to explore how HTMX enables dynamic, interactive web experiences with minimal JavaScript, using server-rendered HTML partials instead.
+
 ## Features
 
 - **Browse articles** organized by categories (Politics, Sport, Culture, Economy, Technology, Science, Health, Environment, Travel)
